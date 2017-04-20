@@ -76,6 +76,40 @@ function PomodoroTimeSelector(domID) {
   };
 }
 
+function PomodoroUserControl(domID) {
+  "use strict";
+  
+  var mDOMID = domID;
+  
+  var oThis = this;
+  
+  //Callback when a user clicks a button.  First parameter is the action string of the
+  //button clicked.
+  this.buttonClicked = undefined;
+  
+  //Render UI.
+  var html = "";
+  html += "<div class='pomodoroUserControl'>";
+  html += "  <table>";
+  html += "	  <tr>";
+  html += "	    <td><button class='btn btn-default resetButton' action='reset'>Reset</button></td>";
+  html += "	    <td><button class='btn btn-default hideShowButton' action='hide'>Hide</button></td>";
+  html += "	   </tr>";
+  html += "  </table>";
+  html += "</div>";
+  $("#" + mDOMID).html(html);
+  
+  $("#" + mDOMID + " .btn").on("click", function(e) {
+    var action = e.target.getAttribute("action");
+    
+    if (action) {
+      //Valid action.
+      
+      if (action === "hide")
+    }
+  });
+  
+}
 $(document).ready(function () {
   //PomodoroTimeSelector testing
   
@@ -85,5 +119,6 @@ $(document).ready(function () {
 //  pTimeSelector.startPomodoroTimer = function(minutes) {
 //    console.log("minutes: " + minutes);
 //  };
+  
   
 });
