@@ -1,6 +1,7 @@
-/*global $, jQuery*/
+/*global $, jQuery, console*/
 
-function PomodoroTimeSelector(domID) {
+//The UI element and button click callbacks for the Pomodoro time selector display.
+function PomodoroTimeSelectorDisplay(domID) {
   "use strict";
   
   //The DOM element to which we will write our HTML to.
@@ -26,7 +27,7 @@ function PomodoroTimeSelector(domID) {
   $("#" + mDOMID).html(html);
   
   $("#" + mDOMID).on("click", ".btn", function(e) {
-    var action = e.target.parentElement.getAttribute("action");
+    var action = e.target.getAttribute("action");
     if (action) {
       oThis.buttonClickCallback(action);
     }
@@ -36,3 +37,53 @@ function PomodoroTimeSelector(domID) {
     $("#" + mDOMID + " .minuteDisplayButton").html(minutes + " mins");
   };
 }
+
+//Functionality exposed by the UI of the PomodoroTimeSelectorDisplay
+function PomodoroTimeSelector(domID) {
+  "use strict";
+  
+  //Callback to start the pomodoro timer.  First parameter is the length
+  //of the pomodoro in minutes.
+  this.startPomodoroTimer = undefined;
+  
+  var mDOMID = domID;
+  var oThis = this;
+  
+  var pomodoroUI = new PomodoroTimeSelectorDisplay(mDOMID);
+  
+  //Default minutes value
+  var minutes = 25;
+  
+  //Set display to default value.
+  pomodoroUI.setMinuteDisplay(minutes);
+  
+  pomodoroUI.buttonClickCallback = function(actionStr) {
+    switch (actionStr) {
+      case "decrement":
+        minutes--;
+        pomodoroUI.setMinuteDisplay(minutes);
+        break;
+        
+      case "increment":
+        minutes++;
+        pomodoroUI.setMinuteDisplay(minutes);
+        break;
+        
+      case "start":
+        oThis.startPomodoroTimer(minutes);
+        break;
+    }
+  };
+}
+
+$(document).ready(function () {
+  //PomodoroTimeSelector testing
+  
+  "use strict";
+  
+  var pTimeSelector = new PomodoroTimeSelector("display");
+  pTimeSelector.startPomodoroTimer = function(minutes) {
+    console.log("minutes: " + minutes);
+  };
+  
+});
