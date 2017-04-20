@@ -1,11 +1,30 @@
 /*global $, jQuery, console*/
 
+//Determine if the supplied object is a jQuery object referring to
+//exactly one DOM element.
+function isjQueryObjectSingular(obj) {
+  "use strict";
+  
+  if (obj === undefined) {
+    throw "Not a jQuery object.";
+  } else if (obj.length === 0) {
+    throw "No matching jQuery elements found.";
+  } else if (obj.length > 1) {
+    throw "More than one matching jQuery elements found.";
+  } else if (obj.length === 1) {
+    //This case is safe; don't throw, just return.
+    return;
+  } else {
+    throw "Unknown error";
+  }
+}
+
 //The UI element and button click callbacks for the Pomodoro time selector display.
-function PomodoroTimeSelectorDisplay(domID) {
+function PomodoroTimeSelectorDisplay(domElem) {
   "use strict";
   
   //The DOM element to which we will write our HTML to.
-  var mDOMID = domID;
+  var mDOMElem = domElem;
   
   //Callback when a button is clicked.
   //First parameter is the action string.
@@ -24,9 +43,9 @@ function PomodoroTimeSelectorDisplay(domID) {
   html += "	</tr>";
   html += "  </table>";
   html += "</div>";
-  $("#" + mDOMID).html(html);
+  mDOMElem.html(html);
   
-  $("#" + mDOMID).on("click", ".btn", function(e) {
+  mDOMElem.on("click", ".btn", function(e) {
     var action = e.target.getAttribute("action");
     if (action) {
       oThis.buttonClickCallback(action);
@@ -34,22 +53,22 @@ function PomodoroTimeSelectorDisplay(domID) {
   });
   
   this.setMinuteDisplay = function(minutes) {
-    $("#" + mDOMID + " .minuteDisplayButton").html(minutes + " mins");
+    mDOMElem.find(".minuteDisplayButton").html(minutes + " mins");
   };
 }
 
 //Functionality exposed by the UI of the PomodoroTimeSelectorDisplay
-function PomodoroTimeSelector(domID) {
+function PomodoroTimeSelector(domElem) {
   "use strict";
   
   //Callback to start the pomodoro timer.  First parameter is the length
   //of the pomodoro in minutes.
   this.startPomodoroTimer = undefined;
   
-  var mDOMID = domID;
+  var mDOMElem = domElem;
   var oThis = this;
   
-  var pomodoroUI = new PomodoroTimeSelectorDisplay(mDOMID);
+  var pomodoroUI = new PomodoroTimeSelectorDisplay(mDOMElem);
   
   //Default minutes value
   var minutes = 25;
@@ -76,10 +95,12 @@ function PomodoroTimeSelector(domID) {
   };
 }
 
-function PomodoroActiveTimerControls(domID) {
+function PomodoroActiveTimerControls(domElem) {
   "use strict";
   
-  var mDOMID = domID;
+  isjQueryObjectSingular(domElem);
+  
+  var mDOMElem = domElem;
   
   var oThis = this;
   
@@ -97,9 +118,9 @@ function PomodoroActiveTimerControls(domID) {
   html += "	   </tr>";
   html += "  </table>";
   html += "</div>";
-  $("#" + mDOMID).html(html);
+  mDOMElem.html(html);
   
-  $("#" + mDOMID + " .btn").on("click", function(e) {
+  mDOMElem.on("click", ".btn", function(e) {
     var action = e.target.getAttribute("action");
     
     if (action) {
@@ -121,7 +142,7 @@ $(document).ready(function () {
 //    console.log("minutes: " + minutes);
 //  };
   
-  var activeTimerControls = new PomodoroActiveTimerControls("display");
+  var activeTimerControls = new PomodoroActiveTimerControls($(".display"));
   activeTimerControls.buttonClicked = function(action) {
     console.log(action);
   };
