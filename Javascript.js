@@ -76,7 +76,7 @@ function PomodoroTimeSelector(domID) {
   };
 }
 
-function PomodoroUserControl(domID) {
+function PomodoroActiveTimerControls(domID) {
   "use strict";
   
   var mDOMID = domID;
@@ -93,7 +93,7 @@ function PomodoroUserControl(domID) {
   html += "  <table>";
   html += "	  <tr>";
   html += "	    <td><button class='btn btn-default resetButton' action='reset'>Reset</button></td>";
-  html += "	    <td><button class='btn btn-default hideShowButton' action='hide'>Hide</button></td>";
+  html += "	    <td><button class='btn btn-default hideButton' action='hide'>Hide</button></td>";
   html += "	   </tr>";
   html += "  </table>";
   html += "</div>";
@@ -105,7 +105,8 @@ function PomodoroUserControl(domID) {
     if (action) {
       //Valid action.
       
-      if (action === "hide")
+      //Call the callback function.
+      oThis.buttonClicked(action);
     }
   });
   
@@ -119,6 +120,11 @@ $(document).ready(function () {
 //  pTimeSelector.startPomodoroTimer = function(minutes) {
 //    console.log("minutes: " + minutes);
 //  };
+  
+  var activeTimerControls = new PomodoroActiveTimerControls("display");
+  activeTimerControls.buttonClicked = function(action) {
+    console.log(action);
+  };
   
   
 });
