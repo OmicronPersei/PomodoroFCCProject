@@ -81,9 +81,9 @@ $(document).ready(function () {
   
   "use strict";
   
-  var pTimeSelector = new PomodoroTimeSelector("display");
-  pTimeSelector.startPomodoroTimer = function(minutes) {
-    console.log("minutes: " + minutes);
-  };
+//  var pTimeSelector = new PomodoroTimeSelector("display");
+//  pTimeSelector.startPomodoroTimer = function(minutes) {
+//    console.log("minutes: " + minutes);
+//  };
   
 });
