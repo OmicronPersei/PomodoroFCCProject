@@ -1,4 +1,4 @@
-/*global $, jQuery, console*/
+/*global $, jQuery, console, ProgressBar*/
 
 //Determine if the supplied object is a jQuery object referring to
 //exactly one DOM element.
@@ -132,6 +132,30 @@ function PomodoroActiveTimerControls(domElem) {
   });
   
 }
+
+function PomodoroTimeRemainingDisplay(domElem) {
+  "use strict";
+  
+  isjQueryObjectSingular(domElem);
+  
+  var mDOMElem = domElem;
+  
+  //Render the shell of our view.
+  //CSS will take care of .timeSelectorDisplay being on top of .circle.
+  var html = ""; 
+  html += "<div class='circleDisplay'>";
+  html += "  <div class='circle' />";
+  html += "  <div class='timeSelectorDisplay' />";
+  html += "</div>";
+  mDOMElem.html(html);
+  
+  var mCircleElem = mDOMElem.find(".circle");
+  //Check the circle element object refers only to one DOM object.
+  isjQueryObjectSingular(mCircleElem);
+  
+  var mCircleProgress = new ProgressBar.Circle(mCircleElem);
+}
+
 $(document).ready(function () {
   //PomodoroTimeSelector testing
   
@@ -142,10 +166,10 @@ $(document).ready(function () {
 //    console.log("minutes: " + minutes);
 //  };
   
-  var activeTimerControls = new PomodoroActiveTimerControls($(".display"));
-  activeTimerControls.buttonClicked = function(action) {
-    console.log(action);
-  };
+//  var activeTimerControls = new PomodoroActiveTimerControls($(".display"));
+//  activeTimerControls.buttonClicked = function(action) {
+//    console.log(action);
+//  };
   
   
 });

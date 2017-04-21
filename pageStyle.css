@@ -1,0 +1,23 @@
+.circleDisplay {
+  position: relative;
+  height: 100px;
+  width: 100px;
+}
+
+.circleDisplay .circle {
+  position: absolute;
+  top: 0;
+  left; 0;
+  height: 100px;
+  width: 100px;
+  z-index: 1;
+}
+
+.circleDisplay .timeSelectorDisplay {
+  position: absolute;
+  top: 0;
+  left; 0;
+  height: 100px;
+  width: 100px;
+  z-index: 2;
+}
