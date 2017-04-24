@@ -24,7 +24,7 @@ function PomodoroTimeSelectorDisplay(domElem) {
   "use strict";
   
   //The DOM element to which we will write our HTML to.
-  var mDOMElem = domElem;
+  var mDOMElem = domElem[0];
   
   //Callback when a button is clicked.
   //First parameter is the action string.
@@ -100,7 +100,7 @@ function PomodoroActiveTimerControls(domElem) {
   
   isjQueryObjectSingular(domElem);
   
-  var mDOMElem = domElem;
+  var mDOMElem = domElem[0];
   
   var oThis = this;
   
@@ -149,11 +149,14 @@ function PomodoroTimeRemainingDisplay(domElem) {
   html += "</div>";
   mDOMElem.html(html);
   
-  var mCircleElem = mDOMElem.find(".circle");
+  var mCircleElems = mDOMElem.find(".circle");
   //Check the circle element object refers only to one DOM object.
-  isjQueryObjectSingular(mCircleElem);
+  isjQueryObjectSingular(mCircleElems);
+  
+  var mCircleElem = mCircleElems[0];
   
   var mCircleProgress = new ProgressBar.Circle(mCircleElem);
+//  mCircleProgress.animate(0.25);
 }
 
 $(document).ready(function () {
@@ -170,6 +173,8 @@ $(document).ready(function () {
 //  activeTimerControls.buttonClicked = function(action) {
 //    console.log(action);
 //  };
+  
+  var timeRemainingDisplay = new PomodoroTimeRemainingDisplay($(".display"));
   
   
 });
