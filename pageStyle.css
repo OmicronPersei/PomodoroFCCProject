@@ -20,4 +20,16 @@
   height: 100px;
   width: 100px;
   z-index: 2;
+  display: table;
+}
+
+.circleDisplay .timeSelectorDisplay>div {
+  display: table-cell;
+  margin: auto;
+  vertical-align: middle;
+}
+
+.circleDisplay .timeSelectorDisplay>div>table {
+  margin: auto;
+  text-align: center;
 }

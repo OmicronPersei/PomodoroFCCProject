@@ -98,9 +98,9 @@ function PomodoroTimeSelector(domElem) {
 function PomodoroActiveTimerControls(domElem) {
   "use strict";
   
-  isjQueryObjectSingular(domElem);
+//  isjQueryObjectSingular(domElem);
   
-  var mDOMElem = domElem[0];
+  var mDOMElem = domElem.hasOwnProperty("length") ? domElem[0] : domElem;
   
   var oThis = this;
   
@@ -118,9 +118,9 @@ function PomodoroActiveTimerControls(domElem) {
   html += "	   </tr>";
   html += "  </table>";
   html += "</div>";
-  mDOMElem.html(html);
+  mDOMElem.innerHTML = html;
   
-  mDOMElem.on("click", ".btn", function(e) {
+  $(mDOMElem).on("click", ".btn", function(e) {
     var action = e.target.getAttribute("action");
     
     if (action) {
@@ -133,12 +133,43 @@ function PomodoroActiveTimerControls(domElem) {
   
 }
 
-function PomodoroTimeRemainingDisplay(domElem) {
+function PomodoroTimeRemainingTextAndButtons(domElem) {
   "use strict";
   
-  isjQueryObjectSingular(domElem);
+  var mDOMElem = domElem.hasOwnProperty("length") ? domElem[0] : domElem;
   
-  var mDOMElem = domElem;
+  var html = "";
+  html += "<div>";
+  html += "  <table>";
+  html += "    <tr><td><div class='timeRemainingText' /></td></tr>";
+  html += "    <tr><td><div class='activeTimerControls' /></td></tr>";
+  html += "  </table>";
+  html += "</div>";
+  mDOMElem.innerHTML = html;
+  
+  var mTimeRemainingTextElem = $(mDOMElem).find(".timeRemainingText")[0];
+  var mActiveTimerControlsElem = $(mDOMElem).find(".activeTimerControls")[0];
+  
+  var mActiveTimerControls = new PomodoroActiveTimerControls(mActiveTimerControlsElem);
+  var oThis = this;
+  this.buttonClickedCallback = undefined;
+  mActiveTimerControls.buttonClicked = function(action) {
+    if (oThis.buttonClickedCallback) {
+      oThis.buttonClickedCallback(action);
+    }
+  }
+  
+  this.setTimeRemainingText = function(text) {
+    mTimeRemainingTextElem.innerHTML = text;
+  };
+}
+
+function PomodoroCircleDisplay(domElem) {
+  "use strict";
+  
+//  isjQueryObjectSingular(domElem);
+  
+  var mDOMElem = domElem.hasOwnProperty("length") ? domElem[0] : domElem;
   
   //Render the shell of our view.
   //CSS will take care of .timeSelectorDisplay being on top of .circle.
@@ -147,16 +178,15 @@ function PomodoroTimeRemainingDisplay(domElem) {
   html += "  <div class='circle' />";
   html += "  <div class='timeSelectorDisplay' />";
   html += "</div>";
-  mDOMElem.html(html);
+  $(mDOMElem).html(html);
   
-  var mCircleElems = mDOMElem.find(".circle");
-  //Check the circle element object refers only to one DOM object.
-  isjQueryObjectSingular(mCircleElems);
-  
-  var mCircleElem = mCircleElems[0];
+  var mCircleElem = $(mDOMElem).find(".circle")[0];
+  var mTimeSelectorDisplayElem = $(mDOMElem).find(".timeSelectorDisplay")[0];
   
   var mCircleProgress = new ProgressBar.Circle(mCircleElem);
-//  mCircleProgress.animate(0.25);
+  
+  var mTimeSelectorDisplay = new PomodoroTimeRemainingTextAndButtons(mTimeSelectorDisplayElem);
+  
 }
 
 $(document).ready(function () {
@@ -174,7 +204,12 @@ $(document).ready(function () {
 //    console.log(action);
 //  };
   
-  var timeRemainingDisplay = new PomodoroTimeRemainingDisplay($(".display"));
+//  var timeRemainingDisplay = new PomodoroTimeRemainingDisplay($(".display"));
+  
+//  var timeRemainingTextAndButtons = new PomodoroTimeRemainingTextAndButtons($(".timeSelectorDisplay"));
+//  timeRemainingTextAndButtons.setTimeRemainingText("23:45");
+  
+  var circleDisplay = new PomodoroCircleDisplay($(".display"));
   
   
 });
