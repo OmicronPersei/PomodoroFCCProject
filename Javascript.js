@@ -2,22 +2,22 @@
 
 //Determine if the supplied object is a jQuery object referring to
 //exactly one DOM element.
-function isjQueryObjectSingular(obj) {
-  "use strict";
-  
-  if (obj === undefined) {
-    throw "Not a jQuery object.";
-  } else if (obj.length === 0) {
-    throw "No matching jQuery elements found.";
-  } else if (obj.length > 1) {
-    throw "More than one matching jQuery elements found.";
-  } else if (obj.length === 1) {
-    //This case is safe; don't throw, just return.
-    return;
-  } else {
-    throw "Unknown error";
-  }
-}
+//function isjQueryObjectSingular(obj) {
+//  "use strict";
+//  
+//  if (obj === undefined) {
+//    throw "Not a jQuery object.";
+//  } else if (obj.length === 0) {
+//    throw "No matching jQuery elements found.";
+//  } else if (obj.length > 1) {
+//    throw "More than one matching jQuery elements found.";
+//  } else if (obj.length === 1) {
+//    //This case is safe; don't throw, just return.
+//    return;
+//  } else {
+//    throw "Unknown error";
+//  }
+//}
 
 //The UI element and button click callbacks for the Pomodoro time selector display.
 function PomodoroTimeSelectorDisplay(domElem) {
@@ -133,7 +133,7 @@ function PomodoroActiveTimerControls(domElem) {
   
 }
 
-function PomodoroTimeRemainingTextAndButtons(domElem) {
+function PomodoroTimeRemainingControls(domElem) {
   "use strict";
   
   var mDOMElem = domElem.hasOwnProperty("length") ? domElem[0] : domElem;
@@ -157,7 +157,7 @@ function PomodoroTimeRemainingTextAndButtons(domElem) {
     if (oThis.buttonClickedCallback) {
       oThis.buttonClickedCallback(action);
     }
-  }
+  };
   
   this.setTimeRemainingText = function(text) {
     mTimeRemainingTextElem.innerHTML = text;
@@ -170,6 +170,7 @@ function PomodoroCircleDisplay(domElem) {
 //  isjQueryObjectSingular(domElem);
   
   var mDOMElem = domElem.hasOwnProperty("length") ? domElem[0] : domElem;
+  var oThis = this;
   
   //Render the shell of our view.
   //CSS will take care of .timeSelectorDisplay being on top of .circle.
@@ -179,13 +180,42 @@ function PomodoroCircleDisplay(domElem) {
   html += "  <div class='timeSelectorDisplay' />";
   html += "</div>";
   $(mDOMElem).html(html);
-  
   var mCircleElem = $(mDOMElem).find(".circle")[0];
   var mTimeSelectorDisplayElem = $(mDOMElem).find(".timeSelectorDisplay")[0];
   
   var mCircleProgress = new ProgressBar.Circle(mCircleElem);
   
-  var mTimeSelectorDisplay = new PomodoroTimeRemainingTextAndButtons(mTimeSelectorDisplayElem);
+  var mTimeSelectorDisplay = new PomodoroTimeRemainingControls(mTimeSelectorDisplayElem);
+  
+  var mSecondsRemaining = 0;
+  var mTotalSeconds = 1;
+  
+  var getMinutesSecondsFormatted = function(seconds) {
+    var minutes = 0;
+    while (seconds >= 60) {
+      minutes++;
+      seconds -= 60;
+    }
+    
+    return minutes + ":" + seconds;
+  };
+  
+  var setDisplay = function() {
+    var amountElapsed = (mTotalSeconds - mSecondsRemaining) / mTotalSeconds;
+    
+    mTimeSelectorDisplay.setTimeRemainingText(getMinutesSecondsFormatted(mSecondsRemaining));
+    mCircleProgress.animate(amountElapsed);
+  };
+  
+  this.setTotalTime = function(totalTimeInSeconds) {
+    mTotalSeconds = totalTimeInSeconds;
+  };
+  
+  this.setRemainingTime = function(secondsRemaining) {
+    mSecondsRemaining = secondsRemaining;
+    
+    setDisplay();
+  };
   
 }
 
@@ -193,23 +223,6 @@ $(document).ready(function () {
   //PomodoroTimeSelector testing
   
   "use strict";
-  
-//  var pTimeSelector = new PomodoroTimeSelector("display");
-//  pTimeSelector.startPomodoroTimer = function(minutes) {
-//    console.log("minutes: " + minutes);
-//  };
-  
-//  var activeTimerControls = new PomodoroActiveTimerControls($(".display"));
-//  activeTimerControls.buttonClicked = function(action) {
-//    console.log(action);
-//  };
-  
-//  var timeRemainingDisplay = new PomodoroTimeRemainingDisplay($(".display"));
-  
-//  var timeRemainingTextAndButtons = new PomodoroTimeRemainingTextAndButtons($(".timeSelectorDisplay"));
-//  timeRemainingTextAndButtons.setTimeRemainingText("23:45");
-  
-  var circleDisplay = new PomodoroCircleDisplay($(".display"));
   
   
 });
