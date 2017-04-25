@@ -220,11 +220,32 @@ function PomodoroTimer(domElem) {
   var mPomodoroContainer = $(domElem).find(".pomodoroContainer")[0];
   var mInitialUserEntryDisplay;
   var mCircleDisplay;
+  function displayInitialUserInput() {
+    mInitialUserEntryDisplay = new PomodoroTimeSelector(mPomodoroContainer);
+    
+    mInitialUserEntryDisplay.startPomodoroTimer = function(minutes) {
+      startTimer(minutes);
+    };
+  }
+  
+  function startTimer(minutes) {
+    displayActiveTimer();
+    
+    var totalSeconds = minutes * 60;
+    
+    mCircleDisplay.setTotalTime(totalSeconds);
+    mCircleDisplay.setRemainingTime(totalSeconds);
+  }
+  
+  function displayActiveTimer() {
+    mCircleDisplay = new PomodoroCircleDisplay(mPomodoroContainer);
+    mCircleDisplay.buttonClickedCallback = function(action) { handleActiveTimerButtonPress(action); };
+  }
   
   function handleActiveTimerButtonPress(action) {
     switch (action) {
       case "reset":
-        //stuff
+        resetTimer();
         break;
         
       case "hide":
@@ -237,17 +258,12 @@ function PomodoroTimer(domElem) {
     }
   }
   
-  function displayActiveTimer() {
-    mCircleDisplay = new PomodoroCircleDisplay(mPomodoroContainer);
-    mCircleDisplay.buttonClickedCallback = function(action) { handleActiveTimerButtonPress(action); };
+  function resetTimer() {
+    displayInitialUserInput();
   }
   
-  function displayInitialUserInput() {
-    mInitialUserEntryDisplay = new PomodoroTimeSelector(mPomodoroContainer);
+  function hideCurrentTimer() {
     
-    mInitialUserEntryDisplay.startPomodoroTimer = function(seconds) {
-      displayActiveTimer();
-    };
   }
   
   //Display the initial display.
