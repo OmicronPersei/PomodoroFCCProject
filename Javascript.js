@@ -1,30 +1,11 @@
 /*global $, jQuery, console, ProgressBar*/
 
-//Determine if the supplied object is a jQuery object referring to
-//exactly one DOM element.
-//function isjQueryObjectSingular(obj) {
-//  "use strict";
-//  
-//  if (obj === undefined) {
-//    throw "Not a jQuery object.";
-//  } else if (obj.length === 0) {
-//    throw "No matching jQuery elements found.";
-//  } else if (obj.length > 1) {
-//    throw "More than one matching jQuery elements found.";
-//  } else if (obj.length === 1) {
-//    //This case is safe; don't throw, just return.
-//    return;
-//  } else {
-//    throw "Unknown error";
-//  }
-//}
-
 //The UI element and button click callbacks for the Pomodoro time selector display.
 function PomodoroTimeSelectorDisplay(domElem) {
   "use strict";
   
   //The DOM element to which we will write our HTML to.
-  var mDOMElem = domElem[0];
+  var mDOMElem = domElem;
   
   //Callback when a button is clicked.
   //First parameter is the action string.
@@ -43,17 +24,17 @@ function PomodoroTimeSelectorDisplay(domElem) {
   html += "	</tr>";
   html += "  </table>";
   html += "</div>";
-  mDOMElem.html(html);
+  $(mDOMElem).html(html);
   
-  mDOMElem.on("click", ".btn", function(e) {
+  $(mDOMElem).on("click", ".btn", function(e) {
     var action = e.target.getAttribute("action");
-    if (action) {
+    if ((action) && (oThis.buttonClickCallback)) {
       oThis.buttonClickCallback(action);
     }
   });
   
   this.setMinuteDisplay = function(minutes) {
-    mDOMElem.find(".minuteDisplayButton").html(minutes + " mins");
+    $(mDOMElem).find(".minuteDisplayButton").html(minutes + " mins");
   };
 }
 
@@ -89,7 +70,9 @@ function PomodoroTimeSelector(domElem) {
         break;
         
       case "start":
-        oThis.startPomodoroTimer(minutes);
+        if (oThis.startPomodoroTimer) {
+          oThis.startPomodoroTimer(minutes);
+        }
         break;
     }
   };
@@ -133,7 +116,7 @@ function PomodoroActiveTimerControls(domElem) {
   
 }
 
-function PomodoroTimeRemainingControls(domElem) {
+function PomodoroTimeRemainingControlsDisplay(domElem) {
   "use strict";
   
   var mDOMElem = domElem.hasOwnProperty("length") ? domElem[0] : domElem;
@@ -169,6 +152,8 @@ function PomodoroCircleDisplay(domElem) {
   
 //  isjQueryObjectSingular(domElem);
   
+  this.buttonClickedCallback = undefined;
+  
   var mDOMElem = domElem.hasOwnProperty("length") ? domElem[0] : domElem;
   var oThis = this;
   
@@ -185,7 +170,12 @@ function PomodoroCircleDisplay(domElem) {
   
   var mCircleProgress = new ProgressBar.Circle(mCircleElem);
   
-  var mTimeSelectorDisplay = new PomodoroTimeRemainingControls(mTimeSelectorDisplayElem);
+  var mTimeSelectorDisplay = new PomodoroTimeRemainingControlsDisplay(mTimeSelectorDisplayElem);
+  mTimeSelectorDisplay.buttonClickedCallback = function(action) {
+    if (oThis.buttonClickedCallback) {
+      oThis.buttonClickedCallback(action);
+    }
+  };
   
   var mSecondsRemaining = 0;
   var mTotalSeconds = 1;
@@ -219,10 +209,55 @@ function PomodoroCircleDisplay(domElem) {
   
 }
 
+function PomodoroTimer(domElem) {
+  "use strict";
+  
+  var html = "<div class='pomodoroContainer' />";
+  $(domElem).html(html);
+  
+  var oThis = this;
+  
+  var mPomodoroContainer = $(domElem).find(".pomodoroContainer")[0];
+  var mInitialUserEntryDisplay;
+  var mCircleDisplay;
+  
+  function handleActiveTimerButtonPress(action) {
+    switch (action) {
+      case "reset":
+        //stuff
+        break;
+        
+      case "hide":
+        //stuff
+        break;
+        
+      default:
+        //idk
+        break;
+    }
+  }
+  
+  function displayActiveTimer() {
+    mCircleDisplay = new PomodoroCircleDisplay(mPomodoroContainer);
+    mCircleDisplay.buttonClickedCallback = function(action) { handleActiveTimerButtonPress(action); };
+  }
+  
+  function displayInitialUserInput() {
+    mInitialUserEntryDisplay = new PomodoroTimeSelector(mPomodoroContainer);
+    
+    mInitialUserEntryDisplay.startPomodoroTimer = function(seconds) {
+      displayActiveTimer();
+    };
+  }
+  
+  //Display the initial display.
+  displayInitialUserInput();
+}
+
 $(document).ready(function () {
   //PomodoroTimeSelector testing
   
   "use strict";
-  
+  var timer = new PomodoroTimer($(".display"));
   
 });
