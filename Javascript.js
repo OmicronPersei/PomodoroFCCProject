@@ -209,6 +209,25 @@ function PomodoroCircleDisplay(domElem) {
   
 }
 
+function PomodoroOneSecondSource() {
+  "use strict";
+  
+  this.secondCallback = undefined;
+  
+  var oThis = this;
+  
+  //Start on instantiation
+  var intervalTimer = setInterval(function() {
+    if (oThis.secondCallback) {
+      oThis.secondCallback();
+    }
+  }, 1000);
+  
+  this.stop = function() {
+    clearInterval(intervalTimer);
+  };
+}
+
 function PomodoroTimer(domElem) {
   "use strict";
   
@@ -220,6 +239,10 @@ function PomodoroTimer(domElem) {
   var mPomodoroContainer = $(domElem).find(".pomodoroContainer")[0];
   var mInitialUserEntryDisplay;
   var mCircleDisplay;
+  var mTimerSoruce;
+  var mTotalSeconds;
+  var mSecondsRemaining;
+  
   function displayInitialUserInput() {
     mInitialUserEntryDisplay = new PomodoroTimeSelector(mPomodoroContainer);
     
@@ -231,10 +254,23 @@ function PomodoroTimer(domElem) {
   function startTimer(minutes) {
     displayActiveTimer();
     
-    var totalSeconds = minutes * 60;
+    var mTotalSeconds = minutes * 60;
     
-    mCircleDisplay.setTotalTime(totalSeconds);
-    mCircleDisplay.setRemainingTime(totalSeconds);
+    mCircleDisplay.setTotalTime(mTotalSeconds);
+    mCircleDisplay.setRemainingTime(mTotalSeconds);
+    
+    mTimerSoruce = new PomodoroOneSecondSource();
+    mTimerSoruce.secondCallback = secondTick;
+  }
+  
+  function secondTick() {
+    mSecondsRemaining--;
+    
+    mCircleDisplay.setRemainingTime(mSecondsRemaining);
+    
+    if (mSecondsRemaining === 0) {
+      mTimerSoruce.stop();
+    }
   }
   
   function displayActiveTimer() {
@@ -274,6 +310,8 @@ $(document).ready(function () {
   //PomodoroTimeSelector testing
   
   "use strict";
-  var timer = new PomodoroTimer($(".display"));
+//  var timer = new PomodoroTimer($(".display"));
+  
+  
   
 });
