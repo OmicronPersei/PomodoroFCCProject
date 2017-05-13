@@ -81,8 +81,6 @@ function PomodoroTimeSelector(domElem) {
 function PomodoroActiveTimerControls(domElem) {
   "use strict";
   
-//  isjQueryObjectSingular(domElem);
-  
   var mDOMElem = domElem.hasOwnProperty("length") ? domElem[0] : domElem;
   
   var oThis = this;
@@ -114,6 +112,41 @@ function PomodoroActiveTimerControls(domElem) {
     }
   });
   
+}
+
+function PomodoroHiddenTimerControls(domElem) {
+  "use strict";
+  
+  var mDOMElem = domElem.hasOwnProperty("length") ? domElem[0] : domElem;
+  
+  var oThis = this;
+  
+  //Callback when a user clicks a button.  First parameter is the action string of the
+  //button clicked.
+  this.buttonClicked = undefined;
+  
+  //Render UI.
+  var html = "";
+  html += "<div class='pomodoroUserControl'>";
+  html += "  <table>";
+  html += "	  <tr>";
+  html += "	    <td><button class='btn btn-default resetButton' action='show'>Show current timer</button></td>";
+  html += "	    <td><button class='btn btn-default hideButton' action='hide'>Hide</button></td>";
+  html += "	   </tr>";
+  html += "  </table>";
+  html += "</div>";
+  mDOMElem.innerHTML = html;
+  
+  $(mDOMElem).on("click", ".btn", function(e) {
+    var action = e.target.getAttribute("action");
+    
+    if (action) {
+      //Valid action.
+      
+      //Call the callback function.
+      oThis.buttonClicked(action);
+    }
+  });
 }
 
 function PomodoroTimeRemainingControlsDisplay(domElem) {
@@ -237,9 +270,11 @@ function PomodoroTimer(domElem) {
   var oThis = this;
   
   var mPomodoroContainer = $(domElem).find(".pomodoroContainer")[0];
+  
   var mInitialUserEntryDisplay;
   var mCircleDisplay;
-  var mTimerSoruce;
+  var mHiddenTimerDisplay;
+  var mTimerSource;
   var mTotalSeconds;
   var mSecondsRemaining;
   
@@ -254,13 +289,18 @@ function PomodoroTimer(domElem) {
   function startTimer(minutes) {
     displayActiveTimer();
     
-    var mTotalSeconds = minutes * 60;
+    mTotalSeconds = minutes * 60;
+    mSecondsRemaining = mTotalSeconds;
     
     mCircleDisplay.setTotalTime(mTotalSeconds);
     mCircleDisplay.setRemainingTime(mTotalSeconds);
     
-    mTimerSoruce = new PomodoroOneSecondSource();
-    mTimerSoruce.secondCallback = secondTick;
+    if (mTimerSource !== undefined) {
+      mTimerSource.secondCallback = null;
+    }
+    
+    mTimerSource = new PomodoroOneSecondSource();
+    mTimerSource.secondCallback = secondTick;
   }
   
   function secondTick() {
@@ -269,13 +309,13 @@ function PomodoroTimer(domElem) {
     mCircleDisplay.setRemainingTime(mSecondsRemaining);
     
     if (mSecondsRemaining === 0) {
-      mTimerSoruce.stop();
+      mTimerSource.stop();
     }
   }
   
   function displayActiveTimer() {
     mCircleDisplay = new PomodoroCircleDisplay(mPomodoroContainer);
-    mCircleDisplay.buttonClickedCallback = function(action) { handleActiveTimerButtonPress(action); };
+    mCircleDisplay.buttonClickedCallback = handleActiveTimerButtonPress;
   }
   
   function handleActiveTimerButtonPress(action) {
@@ -294,12 +334,22 @@ function PomodoroTimer(domElem) {
     }
   }
   
+  function handleHiddenTimerButtonPress(action) {
+    //nothing yet
+  }
+  
   function resetTimer() {
+    if (mTimerSource) {
+      mTimerSource.stop();
+    }
     displayInitialUserInput();
   }
   
   function hideCurrentTimer() {
-    
+    if (!(mHiddenTimerDisplay)) {
+      mHiddenTimerDisplay = new PomodoroHiddenTimerControls(mPomodoroContainer);
+      mHiddenTimerDisplay.buttonClicked = handleHiddenTimerButtonPress;
+    }
   }
   
   //Display the initial display.
@@ -310,7 +360,7 @@ $(document).ready(function () {
   //PomodoroTimeSelector testing
   
   "use strict";
-//  var timer = new PomodoroTimer($(".display"));
+  var timer = new PomodoroTimer($(".display"));
   
   
   
