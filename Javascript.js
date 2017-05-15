@@ -16,14 +16,13 @@ function PomodoroTimeSelectorDisplay(domElem) {
   //Render the view.
   var html = "";
   html += "<div class='pomodoroTimeSelector'>";
-  html += "  <table>";
+  html += "  <div><table>";
   html += "	<tr>";
   html += "	  <td><button class='btn btn-default decrementMinuteButton' action='decrement'>-</button></td>";
   html += "	  <td><button class='btn btn-default minuteDisplayButton' action='start'>N/A mins</button></td>";
   html += "	  <td><button class='btn btn-default incrementMinuteButton' action='increment'>+</button></td>";
   html += "	</tr>";
-  html += "  </table>";
-  html += "</div>";
+  html += "</table></div>";
   $(mDOMElem).html(html);
   
   $(mDOMElem).on("click", ".btn", function(e) {

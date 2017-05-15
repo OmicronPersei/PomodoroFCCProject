@@ -1,3 +1,22 @@
+.pomodoroTimeSelector {
+  width: 600px;
+  height: 600px;
+  margin: auto;
+  display: table;
+}
+
+.pomodoroTimeSelector>div {
+  display: table-cell;
+  vertical-align: middle;
+  align-content: center;
+  margin: auto;
+}
+
+.pomodoroTimeSelector>div>table {
+  margin: auto;
+}
+
+
 .circleDisplay {
   position: relative;
   height: 100px;
