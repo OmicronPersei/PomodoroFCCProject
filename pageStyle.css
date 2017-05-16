@@ -1,7 +1,15 @@
-.pomodoroTimeSelector {
+.display {
   width: 600px;
   height: 600px;
   margin: auto;
+  font-size: 40px;
+}
+
+.pomodoroTimeSelector {
+  width: 600px;
+  height: 600px;
+  margin: 0px;
+  padding: 0px;
   display: table;
 }
 
@@ -16,28 +24,35 @@
   margin: auto;
 }
 
+.btn.btn-default {
+  min-height: 80px;
+  min-width: 120px;
+  font-size: 40px;
+  margin: 5px;
+}
+
 
 .circleDisplay {
   position: relative;
-  height: 100px;
-  width: 100px;
+  height: 600px;
+  width: 600px;
 }
 
 .circleDisplay .circle {
   position: absolute;
   top: 0;
   left; 0;
-  height: 100px;
-  width: 100px;
-  z-index: 1;
+  height: 600px;
+  width: 600px;
+/*  z-index: 1;*/
 }
 
 .circleDisplay .timeSelectorDisplay {
   position: absolute;
   top: 0;
   left; 0;
-  height: 100px;
-  width: 100px;
+  height: 100%;
+  width: 100%;
   z-index: 2;
   display: table;
 }
