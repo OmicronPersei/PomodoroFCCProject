@@ -90,13 +90,13 @@ function PomodoroActiveTimerControls(domElem) {
   
   //Render UI.
   var html = "";
-  html += "<div class='pomodoroUserControl'>";
+  html += "<div class='pomodoroUserControl'><div>";
   html += "  <table>";
   html += "	  <tr>";
   html += "	    <td><button class='btn btn-default resetButton' action='reset'>Reset</button></td>";
   html += "	    <td><button class='btn btn-default hideButton' action='hide'>Hide</button></td>";
   html += "	   </tr>";
-  html += "  </table>";
+  html += "  </table></div>";
   html += "</div>";
   mDOMElem.innerHTML = html;
   
@@ -126,13 +126,13 @@ function PomodoroHiddenTimerControls(domElem) {
   
   //Render UI.
   var html = "";
-  html += "<div class='pomodoroUserControl'>";
+  html += "<div class='pomodoroUserControl'><div>";
   html += "  <table>";
   html += "	  <tr>";
-  html += "	    <td><button class='btn btn-default showButton' action='show'>Show current timer</button></td>";
   html += "	    <td><button class='btn btn-default resetButton' action='reset'>Reset</button></td>";
+  html += "	    <td><button class='btn btn-default showButton' action='show'>Show current timer</button></td>";
   html += "	   </tr>";
-  html += "  </table>";
+  html += "  </table><div>";
   html += "</div>";
   mDOMElem.innerHTML = html;
   
@@ -315,7 +315,7 @@ function PomodoroTimer(domElem) {
       mSecondsRemaining = mTotalSeconds;
     }
     
-    mCircleDisplay.setRemainingTime(mTotalSeconds);
+    mCircleDisplay.setRemainingTime(mSecondsRemaining);
   }
   
   function secondTick() {
