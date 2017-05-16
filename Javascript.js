@@ -212,6 +212,16 @@ function PomodoroCircleDisplay(domElem) {
   var mSecondsRemaining = 0;
   var mTotalSeconds = 1;
   
+  var padWithLeadingZeros = function(value, decimalLength) {
+    var padded = value + "";
+    
+    while (padded.length < decimalLength) {
+      padded = "0" + padded;
+    }
+    
+    return padded;
+  }
+  
   var getMinutesSecondsFormatted = function(seconds) {
     var minutes = 0;
     while (seconds >= 60) {
@@ -219,24 +229,35 @@ function PomodoroCircleDisplay(domElem) {
       seconds -= 60;
     }
     
-    return minutes + ":" + seconds;
+    return padWithLeadingZeros(minutes, 2) + ":" + padWithLeadingZeros(seconds, 2);
   };
   
-  var setDisplay = function() {
+  var setDisplay = function(animate) {
     var amountElapsed = (mTotalSeconds - mSecondsRemaining) / mTotalSeconds;
     
     mTimeSelectorDisplay.setTimeRemainingText(getMinutesSecondsFormatted(mSecondsRemaining));
-    mCircleProgress.animate(amountElapsed);
+    
+    if (animate !== undefined) {
+      if (animate) {
+        mCircleProgress.animate(amountElapsed);
+      } else {
+        mCircleProgress.set(amountElapsed);
+      }
+    } else {
+      //Animate parameter not provided, assume we want to animate to the next value.
+      mCircleProgress.animate(amountElapsed);
+    }
+    
   };
   
   this.setTotalTime = function(totalTimeInSeconds) {
     mTotalSeconds = totalTimeInSeconds;
   };
   
-  this.setRemainingTime = function(secondsRemaining) {
+  this.setRemainingTime = function(secondsRemaining, animate) {
     mSecondsRemaining = secondsRemaining;
     
-    setDisplay();
+    setDisplay(animate);
   };
   
 }
@@ -315,7 +336,8 @@ function PomodoroTimer(domElem) {
       mSecondsRemaining = mTotalSeconds;
     }
     
-    mCircleDisplay.setRemainingTime(mSecondsRemaining);
+    
+    mCircleDisplay.setRemainingTime(mSecondsRemaining, reset);
   }
   
   function secondTick() {
