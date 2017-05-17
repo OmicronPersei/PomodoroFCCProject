@@ -179,6 +179,33 @@ function PomodoroTimeRemainingControlsDisplay(domElem) {
   };
 }
 
+function PomodoroTimesUpDisplay(domElem) {
+  "use strict";
+  
+  var mDOMElem = domElem.hasOwnProperty("length") ? domElem[0] : domElem;
+  
+  var html = "";
+  html + "<div class='pomodoroTimesUpDisplay'>";
+  html + "  <div class='text'>";
+  html + "	 Time's up!";
+  html + "  </div>";
+  html + "  <div class='text'>";
+  html + "	 (click to reset)";
+  html + "  </div>";
+  html + "</div>";
+  $(mDOMElem).html(html);
+  
+  this.userClickedCallback = undefined;
+  
+  var oThis = this;
+  
+  $(mDOMElem).on("click", ".pomodoroTimesUpDisplay", function(e) {
+    if (oThis.userClickedCallback) {
+      oThis.userClickedCallback();
+    }
+  });
+}
+
 function PomodoroCircleDisplay(domElem) {
   "use strict";
   
@@ -297,6 +324,7 @@ function PomodoroTimer(domElem) {
   var mTimerSource;
   var mTotalSeconds;
   var mSecondsRemaining;
+  var mTimerElapsedDisplay = null;
   
   function displayInitialUserInput() {
     mInitialUserEntryDisplay = new PomodoroTimeSelector(mPomodoroContainer);
@@ -315,6 +343,8 @@ function PomodoroTimer(domElem) {
     
     mTimerSource = new PomodoroOneSecondSource();
     mTimerSource.secondCallback = secondTick;
+    
+    mTimerElapsedDisplay = null;
   }
   
   function displayActiveTimer(reset, minutes) {
@@ -336,8 +366,16 @@ function PomodoroTimer(domElem) {
       mSecondsRemaining = mTotalSeconds;
     }
     
-    
     mCircleDisplay.setRemainingTime(mSecondsRemaining, reset);
+    
+    
+  }
+  
+  function displayTimesUpDisplay() {
+    mTimerElapsedDisplay = new PomodoroTimesUpDisplay(mPomodoroContainer);
+    mTimerElapsedDisplay.userClickedCallback = function() {
+      resetTimer();
+    };
   }
   
   function secondTick() {
@@ -347,6 +385,11 @@ function PomodoroTimer(domElem) {
     
     if (mSecondsRemaining === 0) {
       mTimerSource.stop();
+      
+      //Check if it's null to avoid displaying it multiple times.
+      if (mTimerElapsedDisplay === null) {
+        displayTimesUpDisplay();
+      }
     }
   }
   
