@@ -227,7 +227,15 @@ function PomodoroCircleDisplay(domElem) {
   var mCircleElem = $(mDOMElem).find(".circle")[0];
   var mTimeSelectorDisplayElem = $(mDOMElem).find(".timeSelectorDisplay")[0];
   
-  var mCircleProgress = new ProgressBar.Circle(mCircleElem);
+  var mCircleProgress = new ProgressBar.Circle(mCircleElem, {
+    strokeWidth: 10,
+    color: "#49d155",
+    trailWidth: 7,
+    trailColor: "#4c647c"
+  });
+  
+  //Setup Circle style
+  
   
   var mTimeSelectorDisplay = new PomodoroTimeRemainingControlsDisplay(mTimeSelectorDisplayElem);
   mTimeSelectorDisplay.buttonClickedCallback = function(action) {
@@ -264,15 +272,21 @@ function PomodoroCircleDisplay(domElem) {
     
     mTimeSelectorDisplay.setTimeRemainingText(getMinutesSecondsFormatted(mSecondsRemaining));
     
+    var animationOptions = 
+    {
+      duration: 1000,
+      easing: "easeInOut"
+    };
+    
     if (animate !== undefined) {
       if (animate) {
-        mCircleProgress.animate(amountElapsed);
+        mCircleProgress.animate(amountElapsed, animationOptions);
       } else {
         mCircleProgress.set(amountElapsed);
       }
     } else {
       //Animate parameter not provided, assume we want to animate to the next value.
-      mCircleProgress.animate(amountElapsed);
+      mCircleProgress.animate(amountElapsed, animationOptions);
     }
     
   };
