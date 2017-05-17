@@ -185,14 +185,14 @@ function PomodoroTimesUpDisplay(domElem) {
   var mDOMElem = domElem.hasOwnProperty("length") ? domElem[0] : domElem;
   
   var html = "";
-  html + "<div class='pomodoroTimesUpDisplay'>";
-  html + "  <div class='text'>";
-  html + "	 Time's up!";
-  html + "  </div>";
-  html + "  <div class='text'>";
-  html + "	 (click to reset)";
-  html + "  </div>";
-  html + "</div>";
+  html += "<div class='pomodoroTimesUpDisplay'>";
+  html += "  <div class='text'>";
+  html += "	 Time's up!";
+  html += "  </div>";
+  html += "  <div class='text'>";
+  html += "	 (click to reset)";
+  html += "  </div>";
+  html += "</div>";
   $(mDOMElem).html(html);
   
   this.userClickedCallback = undefined;
