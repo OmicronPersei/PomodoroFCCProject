@@ -187,11 +187,9 @@ function PomodoroTimesUpDisplay(domElem) {
   var html = "";
   html += "<div class='pomodoroTimesUpDisplay'>";
   html += "  <div class='text'>";
-  html += "	 Time's up!";
-  html += "  </div>";
-  html += "  <div class='text'>";
-  html += "	 (click to reset)";
-  html += "  </div>";
+  html += "	    <p>Time's up!</p>";
+  html += "	    <p>(click to reset)</p>";
+  html += "   </div>";
   html += "</div>";
   $(mDOMElem).html(html);
   
@@ -230,7 +228,7 @@ function PomodoroCircleDisplay(domElem) {
   var mCircleProgress = new ProgressBar.Circle(mCircleElem, {
     strokeWidth: 10,
     color: "#49d155",
-    trailWidth: 7,
+    trailWidth: 3,
     trailColor: "#4c647c"
   });
   
@@ -268,13 +266,13 @@ function PomodoroCircleDisplay(domElem) {
   };
   
   var setDisplay = function(animate) {
-    var amountElapsed = (mTotalSeconds - mSecondsRemaining) / mTotalSeconds;
+    var amountElapsed = (mTotalSeconds - mSecondsRemaining + 1) / mTotalSeconds;
     
     mTimeSelectorDisplay.setTimeRemainingText(getMinutesSecondsFormatted(mSecondsRemaining));
     
     var animationOptions = 
     {
-      duration: 1000,
+      duration: 1200,
       easing: "easeInOut"
     };
     
@@ -349,16 +347,18 @@ function PomodoroTimer(domElem) {
   }
   
   function startTimer(minutes) {
-    displayActiveTimer(true, minutes);
+    if (minutes > 0) {
+      displayActiveTimer(true, minutes);
     
-    if (mTimerSource !== undefined) {
-      mTimerSource.secondCallback = null;
+      if (mTimerSource !== undefined) {
+        mTimerSource.secondCallback = null;
+      }
+
+      mTimerSource = new PomodoroOneSecondSource();
+      mTimerSource.secondCallback = secondTick;
+
+      mTimerElapsedDisplay = null;
     }
-    
-    mTimerSource = new PomodoroOneSecondSource();
-    mTimerSource.secondCallback = secondTick;
-    
-    mTimerElapsedDisplay = null;
   }
   
   function displayActiveTimer(reset, minutes) {

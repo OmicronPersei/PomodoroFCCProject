@@ -39,9 +39,9 @@ body {
   margin: auto;
 }
 
-.btn.btn-default {
+.pomodoroTimeSelector .btn.btn-default {
   min-height: 80px;
-  min-width: 160px;
+  min-width: 100px;
   font-size: 40px;
   margin: 5px;
 }
@@ -59,7 +59,6 @@ body {
   left; 0;
   height: 100%;
   width: 100%;
-/*  z-index: 1;*/
 }
 
 .circleDisplay .timeSelectorDisplay {
@@ -70,6 +69,13 @@ body {
   width: 100%;
   z-index: 2;
   display: table;
+}
+
+.circleDisplay .timeSelectorDisplay .btn.btn-default {
+  min-height: 80px;
+  min-width: 150px;
+  font-size: 40px;
+  margin: 5px;
 }
 
 .circleDisplay .timeSelectorDisplay>div {
@@ -109,4 +115,23 @@ body {
 
 .pomodoroUserControl>div>table {
   margin: auto;
+}
+
+.pomodoroTimesUpDisplay {
+  height: 100%;
+  width: 100%;
+  display: table;
+  margin: 0px;
+  padding: 0px;
+}
+
+.pomodoroTimesUpDisplay>.text {
+  display: table-cell;
+  vertical-align: middle;
+  align-content: center;
+  margin: auto;
+}
+
+.pomodoroTimesUpDisplay>.text>p {
+  text-align: center;
 }
