@@ -1,7 +1,7 @@
 /*global $, jQuery, console, ProgressBar*/
 
 //The UI element and button click callbacks for the Pomodoro time selector display.
-function PomodoroTimeSelectorDisplay(domElem) {
+function PomodoroTimeSelectorDisplay(domElem, titleString) {
   "use strict";
   
   //The DOM element to which we will write our HTML to.
@@ -16,13 +16,19 @@ function PomodoroTimeSelectorDisplay(domElem) {
   //Render the view.
   var html = "";
   html += "<div class='pomodoroTimeSelector'>";
-  html += "  <div><table>";
-  html += "	<tr>";
-  html += "	  <td><button class='btn btn-default decrementMinuteButton' action='decrement'>-</button></td>";
-  html += "	  <td><button class='btn btn-default minuteDisplayButton' action='start'>N/A mins</button></td>";
-  html += "	  <td><button class='btn btn-default incrementMinuteButton' action='increment'>+</button></td>";
-  html += "	</tr>";
-  html += "</table></div>";
+  html += "	<div class='panel panel-default'>";
+  html += "		<div class='panel-header'>" + titleString + "</div>";
+  html += "		<div class='panel-body' >";
+  html += "			<table>";
+  html += "				<tr>";
+  html += "					<td><button class='btn btn-default decrementMinuteButton' action='decrement'>-</button></td>";
+  html += "					<td><button class='btn btn-default minuteDisplayButton' action='start'>N/A mins</button></td>";
+  html += "					<td><button class='btn btn-default incrementMinuteButton' action='increment'>+</button></td>";
+  html += "				</tr>";
+  html += "			</table>";
+  html += "		</div>";
+  html += "	</div>";
+  html += "</div>";
   $(mDOMElem).html(html);
   
   $(mDOMElem).on("click", ".btn", function(e) {
@@ -38,7 +44,7 @@ function PomodoroTimeSelectorDisplay(domElem) {
 }
 
 //Functionality exposed by the UI of the PomodoroTimeSelectorDisplay
-function PomodoroTimeSelector(domElem) {
+function PomodoroTimeSelector(domElem, titleString) {
   "use strict";
   
   //Callback to start the pomodoro timer.  First parameter is the length
@@ -48,7 +54,7 @@ function PomodoroTimeSelector(domElem) {
   var mDOMElem = domElem;
   var oThis = this;
   
-  var pomodoroUI = new PomodoroTimeSelectorDisplay(mDOMElem);
+  var pomodoroUI = new PomodoroTimeSelectorDisplay(mDOMElem, titleString);
   
   //Default minutes value
   var minutes = 1;
@@ -77,6 +83,29 @@ function PomodoroTimeSelector(domElem) {
   };
 }
 
+function PomodoroInitialInputDisplay(domElem) {
+  "use strict";
+  
+  var html = "";
+  html += "<div class='initialInputDisplay'>";
+  html += "	<table>";
+  html += "		<tr><div class='row1' /></tr>";
+  html += "		<tr><div class='row2' /></tr>";
+  html += "	</table>";
+  html += "</div>";
+  $(domElem).html(html);
+  
+  var row1DomElem = $(domElem, ".row1");
+  var row2DomElem = $(domElem, ".row2");
+  
+  var timerSelectorDisplay = new PomodoroTimeSelector(row1DomElem, "Timer");
+  var breakSelectorDisplay = new PomodoroTimeSelector(row2DomElem, "Break");
+  
+  
+}
+
+//Buttons to be available during a Pomodoro timer, 
+//when it is currently being shown.
 function PomodoroActiveTimerControls(domElem) {
   "use strict";
   
@@ -113,6 +142,8 @@ function PomodoroActiveTimerControls(domElem) {
   
 }
 
+//Buttons to be available during a Pomodoro timer,
+//when the time remaining is currently hidden.
 function PomodoroHiddenTimerControls(domElem) {
   "use strict";
   
@@ -148,6 +179,8 @@ function PomodoroHiddenTimerControls(domElem) {
   });
 }
 
+//The UI elements of a currently running Pomodoro timer, including
+//time remaining text and control buttons.
 function PomodoroTimeRemainingControlsDisplay(domElem) {
   "use strict";
   
@@ -179,6 +212,7 @@ function PomodoroTimeRemainingControlsDisplay(domElem) {
   };
 }
 
+//Time's up display
 function PomodoroTimesUpDisplay(domElem) {
   "use strict";
   
@@ -204,6 +238,9 @@ function PomodoroTimesUpDisplay(domElem) {
   });
 }
 
+//Pomodoro time remaining circle display, including animated
+//circle progress graphic and time remaining UI elements contained
+//in PomodoroTimeRemainingControlsDisplay.
 function PomodoroCircleDisplay(domElem) {
   "use strict";
   
@@ -301,6 +338,7 @@ function PomodoroCircleDisplay(domElem) {
   
 }
 
+//Provides a callback every 1 s.
 function PomodoroOneSecondSource() {
   "use strict";
   

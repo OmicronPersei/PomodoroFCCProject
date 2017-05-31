@@ -8,6 +8,11 @@ body {
 .btn.btn-default {
   background-color: #444;
   color: white;
+  
+  min-height: 80px;
+  min-width: 100px;
+  font-size: 40px;
+  margin: 5px;
 }
 
 .pomodoroContainer {
@@ -28,6 +33,11 @@ body {
   display: table;
 }
 
+.pomodoroTimeSelector .panel-header {
+  color: black;
+}
+
+/*
 .pomodoroTimeSelector>div {
   display: table-cell;
   vertical-align: middle;
@@ -38,6 +48,7 @@ body {
 .pomodoroTimeSelector>div>table {
   margin: auto;
 }
+*/
 
 .pomodoroTimeSelector .btn.btn-default {
   min-height: 80px;
