@@ -58,6 +58,10 @@ function PomodoroTimeSelector(domElem, titleString, defaultTimeValue) {
   
   var minutes = (defaultTimeValue) ? defaultTimeValue : 1;
   
+  this.getMinutes = function() {
+    return minutes;
+  };
+  
   //Set display to default value.
   pomodoroUI.setMinuteDisplay(minutes);
   
@@ -105,9 +109,9 @@ function PomodoroInitialInputDisplay(domElem) {
   var timerSelectorDisplay = new PomodoroTimeSelector(row1DomElem, "Timer", 25);
   var breakSelectorDisplay = new PomodoroTimeSelector(row2DomElem, "Break", 5);
   
-  timerSelectorDisplay.startPomodoroTimer = function(minutes) {
+  timerSelectorDisplay.startPomodoroTimer = function(pomod) {
     if (oThis.startTimerCallback) {
-      oThis.startTimerCallback(minutes);
+      oThis.startTimerCallback(timerSelectorDisplay.getMinutes(), breakSelectorDisplay.getMinutes());
     }
   };
   
@@ -383,40 +387,59 @@ function PomodoroTimer(domElem) {
   var mTimerSource;
   var mTotalSeconds;
   var mSecondsRemaining;
+  
+  var mTimerLength; //in minutes
+  var mBreakLength; //in minutes
+  
+  var CurrentTimerType = {
+    POMODORO: "Pomodoro",
+    BREAK: "Break"
+  };
+  
+  var mCurrentTimerType;
+  
   var mTimerElapsedDisplay = null;
   
   function displayInitialUserInput() {
     mInitialUserEntryDisplay = new PomodoroInitialInputDisplay(mPomodoroContainer);
-    mInitialUserEntryDisplay.startTimerCallback = function(minutes) {
-      startTimer(minutes);
+    
+    mInitialUserEntryDisplay.startTimerCallback = function(timerLength, breakLength) {
+      startPomodoroTimer(timerLength, breakLength);
     };
   }
   
-  function startTimer(minutes) {
-    if (minutes > 0) {
-      displayActiveTimer(true, minutes);
-    
-      if (mTimerSource !== undefined) {
-        mTimerSource.secondCallback = null;
-      }
-
-      mTimerSource = new PomodoroOneSecondSource();
-      mTimerSource.secondCallback = secondTick;
-
-      mTimerElapsedDisplay = null;
+  function startPomodoroTimer(timerLength, breakLength) {
+    if ((timerLength > 0) && (breakLength > 0)) {
+      mTimerLength = timerLength;
+      mBreakLength = breakLength;
+      
+      mCurrentTimerType = CurrentTimerType.POMODORO;
+      
+      startTimer(mTimerLength);
     }
   }
   
-  function displayActiveTimer(reset, minutes) {
+  function startTimer(length) {
+    mTimerElapsedDisplay = null;
     
-    //if ((reset) || (mCircleDisplay === undefined)) {
-      mCircleDisplay = new PomodoroCircleDisplay(mPomodoroContainer);
-      mCircleDisplay.buttonClickedCallback = handleActiveTimerButtonPress;
-    //}
+    displayActiveTimer(true, length);
     
-    if (minutes) {
+    if (mTimerSource !== undefined) {
+      mTimerSource.secondCallback = null;
+    }
+
+    mTimerSource = new PomodoroOneSecondSource();
+    mTimerSource.secondCallback = secondTick;
+  }
+  
+  function displayActiveTimer(reset, length) {
+    
+    mCircleDisplay = new PomodoroCircleDisplay(mPomodoroContainer);
+    mCircleDisplay.buttonClickedCallback = handleActiveTimerButtonPress;
+    
+    if (length) {
       //Minutes were provided.  Set the total seconds of the timer.
-      mTotalSeconds = minutes * 60;
+      mTotalSeconds = length * 60;
     }
     
     mCircleDisplay.setTotalTime(mTotalSeconds);
@@ -427,8 +450,6 @@ function PomodoroTimer(domElem) {
     }
     
     mCircleDisplay.setRemainingTime(mSecondsRemaining, reset);
-    
-    
   }
   
   function displayTimesUpDisplay() {
@@ -446,9 +467,16 @@ function PomodoroTimer(domElem) {
     if (mSecondsRemaining === 0) {
       mTimerSource.stop();
       
-      //Check if it's null to avoid displaying it multiple times.
-      if (mTimerElapsedDisplay === null) {
-        displayTimesUpDisplay();
+      switch (mCurrentTimerType) {
+        case CurrentTimerType.POMODORO:
+          mCurrentTimerType = CurrentTimerType.BREAK;
+          startTimer(mBreakLength);
+          break;
+          
+        case CurrentTimerType.BREAK:
+          mCurrentTimerType = CurrentTimerType.POMODORO;
+          startTimer(mTimerLength);
+          break;
       }
     }
   }
