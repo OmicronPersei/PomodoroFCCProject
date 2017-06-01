@@ -22,7 +22,7 @@ function PomodoroTimeSelectorDisplay(domElem, titleString) {
   html += "			<table>";
   html += "				<tr>";
   html += "					<td><button class='btn btn-default decrementMinuteButton' action='decrement'>-</button></td>";
-  html += "					<td><button class='btn btn-default minuteDisplayButton' action='start'>N/A mins</button></td>";
+  html += "					<td><button class='btn btn-default minuteDisplayButton'>N/A mins</button></td>";
   html += "					<td><button class='btn btn-default incrementMinuteButton' action='increment'>+</button></td>";
   html += "				</tr>";
   html += "			</table>";
@@ -46,10 +46,6 @@ function PomodoroTimeSelectorDisplay(domElem, titleString) {
 //Functionality exposed by the UI of the PomodoroTimeSelectorDisplay
 function PomodoroTimeSelector(domElem, titleString, defaultTimeValue) {
   "use strict";
-  
-  //Callback to start the pomodoro timer.  First parameter is the length
-  //of the pomodoro in minutes.
-  this.startPomodoroTimer = undefined;
   
   var mDOMElem = domElem;
   var oThis = this;
@@ -76,12 +72,6 @@ function PomodoroTimeSelector(domElem, titleString, defaultTimeValue) {
         minutes++;
         pomodoroUI.setMinuteDisplay(minutes);
         break;
-        
-      case "start":
-        if (oThis.startPomodoroTimer) {
-          oThis.startPomodoroTimer(minutes);
-        }
-        break;
     }
   };
 }
@@ -94,6 +84,7 @@ function PomodoroInitialInputDisplay(domElem) {
   html += "	<table>";
   html += "		<tr><div class='row1' /></tr>";
   html += "		<tr><div class='row2' /></tr>";
+  html += "   <tr><button class='btn btn-default startButton'>Start</button></tr>"
   html += "	</table>";
   html += "</div>";
   $(domElem).html(html);
@@ -109,12 +100,9 @@ function PomodoroInitialInputDisplay(domElem) {
   var timerSelectorDisplay = new PomodoroTimeSelector(row1DomElem, "Timer", 25);
   var breakSelectorDisplay = new PomodoroTimeSelector(row2DomElem, "Break", 5);
   
-  timerSelectorDisplay.startPomodoroTimer = function(pomod) {
-    if (oThis.startTimerCallback) {
-      oThis.startTimerCallback(timerSelectorDisplay.getMinutes(), breakSelectorDisplay.getMinutes());
-    }
-  };
-  
+  $(domElem).find(".startButton").on("click", function() {
+    oThis.startTimerCallback(timerSelectorDisplay.getMinutes(), breakSelectorDisplay.getMinutes());
+  });
 }
 
 //Buttons to be available during a Pomodoro timer, 
