@@ -44,7 +44,7 @@ function PomodoroTimeSelectorDisplay(domElem, titleString) {
 }
 
 //Functionality exposed by the UI of the PomodoroTimeSelectorDisplay
-function PomodoroTimeSelector(domElem, titleString) {
+function PomodoroTimeSelector(domElem, titleString, defaultTimeValue) {
   "use strict";
   
   //Callback to start the pomodoro timer.  First parameter is the length
@@ -56,8 +56,7 @@ function PomodoroTimeSelector(domElem, titleString) {
   
   var pomodoroUI = new PomodoroTimeSelectorDisplay(mDOMElem, titleString);
   
-  //Default minutes value
-  var minutes = 1;
+  var minutes = (defaultTimeValue) ? defaultTimeValue : 1;
   
   //Set display to default value.
   pomodoroUI.setMinuteDisplay(minutes);
@@ -95,12 +94,22 @@ function PomodoroInitialInputDisplay(domElem) {
   html += "</div>";
   $(domElem).html(html);
   
-  var row1DomElem = $(domElem, ".row1");
-  var row2DomElem = $(domElem, ".row2");
+  var oThis = this;
   
-  var timerSelectorDisplay = new PomodoroTimeSelector(row1DomElem, "Timer");
-  var breakSelectorDisplay = new PomodoroTimeSelector(row2DomElem, "Break");
+  var row1DomElem = $(domElem).find(".row1")[0];
+  var row2DomElem = $(domElem).find(".row2")[0];
   
+  //Callback for when the timer should start.
+  this.startTimerCallback = undefined;
+  
+  var timerSelectorDisplay = new PomodoroTimeSelector(row1DomElem, "Timer", 25);
+  var breakSelectorDisplay = new PomodoroTimeSelector(row2DomElem, "Break", 5);
+  
+  timerSelectorDisplay.startPomodoroTimer = function(minutes) {
+    if (oThis.startTimerCallback) {
+      oThis.startTimerCallback(minutes);
+    }
+  };
   
 }
 
@@ -377,9 +386,8 @@ function PomodoroTimer(domElem) {
   var mTimerElapsedDisplay = null;
   
   function displayInitialUserInput() {
-    mInitialUserEntryDisplay = new PomodoroTimeSelector(mPomodoroContainer);
-    
-    mInitialUserEntryDisplay.startPomodoroTimer = function(minutes) {
+    mInitialUserEntryDisplay = new PomodoroInitialInputDisplay(mPomodoroContainer);
+    mInitialUserEntryDisplay.startTimerCallback = function(minutes) {
       startTimer(minutes);
     };
   }
