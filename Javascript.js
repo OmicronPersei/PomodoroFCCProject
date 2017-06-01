@@ -15,7 +15,7 @@ function PomodoroTimeSelectorDisplay(domElem, titleString) {
   
   //Render the view.
   var html = "";
-  html += "<div class='pomodoroTimeSelector'>";
+  html += "<div class='timeSelector'>";
   html += "	<div class='panel panel-default'>";
   html += "		<div class='panel-header'>" + titleString + "</div>";
   html += "		<div class='panel-body' >";
