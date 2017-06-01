@@ -6,24 +6,31 @@ body {
 }
 
 .btn.btn-default {
-  background-color: #444;
+  background-color: #333;
   color: white;
-  
+  border-width: 0px;
   min-height: 80px;
   min-width: 100px;
   font-size: 40px;
+  font-weight: 100;
   margin: 5px;
 }
 
+.btn.btn-default:active {
+  background-color: #333;
+  color: white;
+}
+
 .pomodoroContainer {
-  width: 600px;
-  height: 600px;
-  margin: 100px auto auto auto;
+  width: 700px;
+  height: 700px;
+  margin: 25px auto auto auto;
   padding: 50px;
   font-size: 40px;
   border-style: solid;
   border-width: 0px;
   border-color: #666;
+  display: table;
 }
 
 .timeSelector {
@@ -58,22 +65,17 @@ body {
 }
 
 .timeSelector .btn.btn-default {
-  border-width: 0px;
-  background-color: #333;
+  font-size: 50px;
+  font-weight: 100;
 }
 
 .timeSelector .btn.btn-default.minuteDisplayButton {
-  border-width: 0px;
-  background-color: #333;
   min-width: 210px
 }
 
-.timeSelector .btn.btn-default {
-  min-height: 80px;
-  min-width: 100px;
-  font-size: 50px;
-  font-weight: 500;
-  margin: 5px;
+.initialInputDisplay {
+  display: table-cell;
+  vertical-align: middle;
 }
 
 .initialInputDisplay .btn.btn-default:active {
@@ -84,7 +86,6 @@ body {
 .initialInputDisplay .startButton {
   border-width: 1px;
   border-color: #49d155;
-  background-color: #333;
   margin: 0px;
   width: 100%;
 }
