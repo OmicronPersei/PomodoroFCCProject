@@ -194,7 +194,7 @@ function PomodoroHiddenTimerControls(domElem) {
 
 //The UI elements of a currently running Pomodoro timer, including
 //time remaining text and control buttons.
-function PomodoroTimeRemainingControlsDisplay(domElem) {
+function PomodoroTimeRemainingControlsDisplay(domElem, titleText) {
   "use strict";
   
   var mDOMElem = domElem.hasOwnProperty("length") ? domElem[0] : domElem;
@@ -202,6 +202,7 @@ function PomodoroTimeRemainingControlsDisplay(domElem) {
   var html = "";
   html += "<div>";
   html += "  <table>";
+  html += "    <tr><td><div class='activeTimerTitle'>" + titleText + "</div></td></tr>";
   html += "    <tr><td><div class='timeRemainingText' /></td></tr>";
   html += "    <tr><td><div class='activeTimerControls' /></td></tr>";
   html += "  </table>";
@@ -254,7 +255,7 @@ function PomodoroTimesUpDisplay(domElem) {
 //Pomodoro time remaining circle display, including animated
 //circle progress graphic and time remaining UI elements contained
 //in PomodoroTimeRemainingControlsDisplay.
-function PomodoroCircleDisplay(domElem) {
+function PomodoroCircleDisplay(domElem, titleText, progressColor) {
   "use strict";
   
 //  isjQueryObjectSingular(domElem);
@@ -277,7 +278,7 @@ function PomodoroCircleDisplay(domElem) {
   
   var mCircleProgress = new ProgressBar.Circle(mCircleElem, {
     strokeWidth: 10,
-    color: "#49d155",
+    color: progressColor,
     trailWidth: 3,
     trailColor: "#4c647c"
   });
@@ -285,7 +286,7 @@ function PomodoroCircleDisplay(domElem) {
   //Setup Circle style
   
   
-  var mTimeSelectorDisplay = new PomodoroTimeRemainingControlsDisplay(mTimeSelectorDisplayElem);
+  var mTimeSelectorDisplay = new PomodoroTimeRemainingControlsDisplay(mTimeSelectorDisplayElem, titleText);
   mTimeSelectorDisplay.buttonClickedCallback = function(action) {
     if (oThis.buttonClickedCallback) {
       oThis.buttonClickedCallback(action);
@@ -434,7 +435,22 @@ function PomodoroTimer(domElem) {
   
   function displayActiveTimer(reset, length) {
     
-    mCircleDisplay = new PomodoroCircleDisplay(mPomodoroContainer);
+    var circleTitleText = "N/A";
+    var circleColor = "#FFF";
+    
+    switch (mCurrentTimerType) {
+      case CurrentTimerType.BREAK:
+        circleTitleText = "Break!";
+        circleColor = "#F00";
+        break;
+        
+      case CurrentTimerType.POMODORO:
+        circleTitleText = "Pomodoro";
+        circleColor = "#49d155";
+        break;
+    }
+    
+    mCircleDisplay = new PomodoroCircleDisplay(mPomodoroContainer, circleTitleText, circleColor);
     mCircleDisplay.buttonClickedCallback = handleActiveTimerButtonPress;
     
     if (length) {
