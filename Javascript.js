@@ -134,8 +134,6 @@ function PomodoroActiveTimerControls(domElem) {
     var action = e.target.getAttribute("action");
     
     if (action) {
-      //Valid action.
-      
       //Call the callback function.
       oThis.buttonClicked(action);
     }
@@ -156,7 +154,7 @@ function PomodoroHiddenTimerControls(domElem) {
   //button clicked.
   this.buttonClicked = undefined;
   
-  //Render UI.
+  //Render the UI.
   var html = "";
   html += "<div class='pomodoroUserControl'><div>";
   html += "  <table>";
@@ -172,8 +170,6 @@ function PomodoroHiddenTimerControls(domElem) {
     var action = e.target.getAttribute("action");
     
     if (action) {
-      //Valid action.
-      
       //Call the callback function.
       oThis.buttonClicked(action);
     }
@@ -212,32 +208,6 @@ function PomodoroTimeRemainingControlsDisplay(domElem, titleText) {
   this.setTimeRemainingText = function(text) {
     mTimeRemainingTextElem.innerHTML = text;
   };
-}
-
-//Time's up display
-function PomodoroTimesUpDisplay(domElem) {
-  "use strict";
-  
-  var mDOMElem = domElem.hasOwnProperty("length") ? domElem[0] : domElem;
-  
-  var html = "";
-  html += "<div class='pomodoroTimesUpDisplay'>";
-  html += "  <div class='text'>";
-  html += "	    <p>Time's up!</p>";
-  html += "	    <p>(click to reset)</p>";
-  html += "   </div>";
-  html += "</div>";
-  $(mDOMElem).html(html);
-  
-  this.userClickedCallback = undefined;
-  
-  var oThis = this;
-  
-  $(mDOMElem).on("click", ".pomodoroTimesUpDisplay", function(e) {
-    if (oThis.userClickedCallback) {
-      oThis.userClickedCallback();
-    }
-  });
 }
 
 //Pomodoro time remaining circle display, including animated
@@ -387,8 +357,6 @@ function PomodoroTimer(domElem) {
   
   var mCurrentTimerType;
   
-  var mTimerElapsedDisplay = null;
-  
   function displayInitialUserInput() {
     mInitialUserEntryDisplay = new PomodoroInitialInputDisplay(mPomodoroContainer);
     
@@ -409,7 +377,6 @@ function PomodoroTimer(domElem) {
   }
   
   function startTimer(length) {
-    mTimerElapsedDisplay = null;
     
     displayActiveTimer(true, length);
     
@@ -454,13 +421,6 @@ function PomodoroTimer(domElem) {
     }
     
     mCircleDisplay.setRemainingTime(mSecondsRemaining, reset);
-  }
-  
-  function displayTimesUpDisplay() {
-    mTimerElapsedDisplay = new PomodoroTimesUpDisplay(mPomodoroContainer);
-    mTimerElapsedDisplay.userClickedCallback = function() {
-      resetTimer();
-    };
   }
   
   function secondTick() {
