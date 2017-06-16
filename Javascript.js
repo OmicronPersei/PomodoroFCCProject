@@ -64,7 +64,10 @@ function PomodoroTimeSelector(domElem, titleString, defaultTimeValue) {
   pomodoroUI.buttonClickCallback = function(actionStr) {
     switch (actionStr) {
       case "decrement":
-        minutes--;
+        if (minutes > 1) {
+          minutes--;
+        }
+        
         pomodoroUI.setMinuteDisplay(minutes);
         break;
         
