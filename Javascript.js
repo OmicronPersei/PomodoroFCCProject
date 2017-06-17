@@ -381,7 +381,7 @@ function TimerSource(minutes) {
 function PomodoroTimer(domElem) {
   "use strict";
   
-  var html = "<div class='pomodoroContainer' />";
+  var html = "<div class='pomodoroContainer smallSized' />";
   $(domElem).html(html);
   
   var oThis = this;
