@@ -16,23 +16,33 @@ body {
   margin: 5px;
 }
 
+.smallSized .btn.btn-default {
+  min-height: 40px;
+  min-width: 50px;
+  font-size: 20px;
+  margin: 2px;
+}
+
 .btn.btn-default:active {
   background-color: #333;
   color: white;
 }
 
-.display {
-  
-}
-
 .pomodoroContainer {
-  width: 600px;
-  height: 600px;
+  width: 700px;
+  height: 700px;
   margin: 25px auto auto auto;
   padding: 50px;
   font-size: 40px;
   display: table;
-  
+}
+
+.pomodoroContainer.smallSized {
+  width: 350px;
+  height: 350px;
+  margin: 13px auto auto auto;
+  padding: 25px;
+  font-size: 20px;
 }
 
 .timeSelector {
@@ -53,10 +63,19 @@ body {
   font-size: 30px
 }
 
+.smallSized .timeSelector .panel-header {
+  padding: 2px 2px 0px 8px;
+  font-size: 15px
+}
+
 .timeSelector .panel-body {
   display: table;
   margin: auto;
   padding: 10px;
+}
+
+.smallSized .timeSelector .panel-body {
+  padding: 5px;
 }
 
 .timeSelector .panel-body table {
@@ -71,8 +90,16 @@ body {
   font-weight: 100;
 }
 
+.smallSized .timeSelector .btn.btn-default {
+  font-size: 25px;
+}
+
 .timeSelector .btn.btn-default.minuteDisplayButton {
-  min-width: 210px
+  min-width: 210px;
+}
+
+.smallSized .timeSelector .btn.btn-default.minuteDisplayButton {
+  min-width: 105px;
 }
 
 .initialInputDisplay {
@@ -95,7 +122,6 @@ body {
 .initialInputDisplay .startButton:active {
   background-color: #49d155;
 }
-
 
 .circleDisplay {
   position: relative;
@@ -121,7 +147,6 @@ body {
   width: 100%;
   z-index: 2;
   display: table;
-  //align-content: center;
 }
 
 .circleDisplay .timeSelectorDisplay .btn.btn-default {
@@ -129,6 +154,13 @@ body {
   min-width: 150px;
   font-size: 40px;
   margin: 5px;
+}
+
+.smallSized .circleDisplay .timeSelectorDisplay .btn.btn-default {
+  min-height: 40px;
+  min-width: 75px;
+  font-size: 20px;
+  margin: 2px;
 }
 
 .circleDisplay .timeSelectorDisplay>div {
@@ -141,17 +173,16 @@ body {
   font-size: 75px;
 }
 
+.smallSized .circleDisplay .timeSelectorDisplay .timeRemainingText {
+  font-size: 38px;
+}
+
 .circleDisplay .timeSelectorDisplay>div>table {
   margin: auto;
   text-align: center;
 }
 
-
 .pomodoroUserControl {
-/*
-  height: 600px;
-  width: 600px;
-*/
   height: 100%;
   width: 100%;
   display: table;

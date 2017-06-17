@@ -381,7 +381,7 @@ function TimerSource(minutes) {
 function PomodoroTimer(domElem) {
   "use strict";
   
-  var html = "<div class='pomodoroContainer smallSized' />";
+  var html = "<div class='pomodoroContainer' />";
   $(domElem).html(html);
   
   var oThis = this;
@@ -403,6 +403,16 @@ function PomodoroTimer(domElem) {
   };
   
   var mCurrentTimerType;
+  
+  //Detect the current window's size.  If it is considered "small",
+  //add the "smallSized" class onto the main display DOM element.
+  if (isCurrentViewportSmall()) {
+    $(mPomodoroContainer).addClass("smallSized");
+  }
+  
+  function isCurrentViewportSmall() {
+    return ($(window).width() < 900);
+  }
   
   function displayInitialUserInput() {
     mInitialUserEntryDisplay = new PomodoroInitialInputDisplay(mPomodoroContainer);
