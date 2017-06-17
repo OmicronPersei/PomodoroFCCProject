@@ -404,6 +404,16 @@ function PomodoroTimer(domElem) {
   
   var mCurrentTimerType;
   
+  //Detect the current window's size.  If it is considered "small",
+  //add the "smallSized" class onto the main display DOM element.
+  if (isCurrentViewportSmall()) {
+    $(mPomodoroContainer).addClass("smallSized");
+  }
+  
+  function isCurrentViewportSmall() {
+    return ($(window).width() < 900);
+  }
+  
   function displayInitialUserInput() {
     mInitialUserEntryDisplay = new PomodoroInitialInputDisplay(mPomodoroContainer);
     

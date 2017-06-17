@@ -16,23 +16,38 @@ body {
   margin: 5px;
 }
 
+.smallSized .btn.btn-default {
+  min-height: 40px;
+  min-width: 50px;
+  font-size: 20px;
+  margin: 2px;
+}
+
 .btn.btn-default:active {
   background-color: #333;
   color: white;
 }
 
 .pomodoroContainer {
-  width: 800px;
-  height: 800px;
+  width: 700px;
+  height: 700px;
   margin: 25px auto auto auto;
   padding: 50px;
   font-size: 40px;
   display: table;
 }
 
+.pomodoroContainer.smallSized {
+  width: 350px;
+  height: 350px;
+  margin: 13px auto auto auto;
+  padding: 25px;
+  font-size: 20px;
+}
+
 .timeSelector {
   width: 100%;
-  height: 100%;
+  height: 50%;
   margin: 0px;
   padding: 0px;
 }
@@ -48,10 +63,19 @@ body {
   font-size: 30px
 }
 
+.smallSized .timeSelector .panel-header {
+  padding: 2px 2px 0px 8px;
+  font-size: 15px
+}
+
 .timeSelector .panel-body {
   display: table;
   margin: auto;
   padding: 10px;
+}
+
+.smallSized .timeSelector .panel-body {
+  padding: 5px;
 }
 
 .timeSelector .panel-body table {
@@ -66,8 +90,16 @@ body {
   font-weight: 100;
 }
 
+.smallSized .timeSelector .btn.btn-default {
+  font-size: 25px;
+}
+
 .timeSelector .btn.btn-default.minuteDisplayButton {
-  min-width: 210px
+  min-width: 210px;
+}
+
+.smallSized .timeSelector .btn.btn-default.minuteDisplayButton {
+  min-width: 105px;
 }
 
 .initialInputDisplay {
@@ -91,11 +123,11 @@ body {
   background-color: #49d155;
 }
 
-
 .circleDisplay {
   position: relative;
-  height: 700px;
-  width: 700px;
+  height: 100%;
+  width: 100%;
+  display: table;
 }
 
 .circleDisplay .circle {
@@ -104,6 +136,7 @@ body {
   left; 0;
   height: 100%;
   width: 100%;
+  z-index: 1;
 }
 
 .circleDisplay .timeSelectorDisplay {
@@ -123,6 +156,13 @@ body {
   margin: 5px;
 }
 
+.smallSized .circleDisplay .timeSelectorDisplay .btn.btn-default {
+  min-height: 40px;
+  min-width: 75px;
+  font-size: 20px;
+  margin: 2px;
+}
+
 .circleDisplay .timeSelectorDisplay>div {
   display: table-cell;
   margin: auto;
@@ -133,17 +173,16 @@ body {
   font-size: 75px;
 }
 
+.smallSized .circleDisplay .timeSelectorDisplay .timeRemainingText {
+  font-size: 38px;
+}
+
 .circleDisplay .timeSelectorDisplay>div>table {
   margin: auto;
   text-align: center;
 }
 
-
 .pomodoroUserControl {
-/*
-  height: 600px;
-  width: 600px;
-*/
   height: 100%;
   width: 100%;
   display: table;
